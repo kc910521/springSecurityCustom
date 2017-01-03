@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  */
 @Controller
-@RequestMapping("/rest/users/")
+@RequestMapping("/rest/users")
 public class UserResource {
 
 	@Autowired

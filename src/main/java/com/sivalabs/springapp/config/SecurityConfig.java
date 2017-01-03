@@ -6,6 +6,7 @@ package com.sivalabs.springapp.config;
 import javax.sql.DataSource;
 
 import com.sivalabs.springapp.filter.MyAuthenticationFilter;
+import com.sivalabs.springapp.web.config.DistributeAuthEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -56,9 +58,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
           .password("admin")
           .roles("ADMIN","USER");
         */
-        
        // registry.jdbcAuthentication().dataSource(dataSource);
 		registry.userDetailsService(customUserDetailsService);
+//		registry.authenticationProvider()//使用authenticationProvider也可以，Authentication中获得用户名密码的方法
+		/**
+		 * 默认DaoAuthenticationProvider，在进行认证的时候需要一个UserDetailsService来获取用户的信息UserDetails
+		 * 其中包括用户名、密码和所拥有的权限等。所以如果我们需要改变认证的方式，我们可以实现自己的AuthenticationProvider
+		 * 如果需要改变认证的用户信息来源，我们可以实现UserDetailsService。
+		 */
     }
 
 
@@ -69,6 +76,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		 .antMatchers("/resources/**"); // #3
 	}
 
+	/**
+	 * 新建filter
+	 * @return
+     */
 	@Bean
 	public MyAuthenticationFilter authenticationFilter() {
 		MyAuthenticationFilter authFilter = new MyAuthenticationFilter();
@@ -88,6 +99,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 		return authFilter;
 	}
 
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 //	ApplicationContext context = http.getSharedObject(ApplicationContext.class);
@@ -95,10 +111,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
 	http
 			.csrf().disable()
 	.authorizeRequests()
-		.antMatchers("/login","/login/form**","/register","/logout","/rest/users/login").permitAll() // #4
+		.antMatchers("/login","/login/form**","/register","/logout","/rest/users/login","/public").permitAll() // #4
 		.antMatchers("/admin","/admin/**").hasRole("ADMIN") // #6
 		.anyRequest().authenticated() // 7
 		.and().addFilterBefore(authenticationFilter(),UsernamePasswordAuthenticationFilter.class)
+			.httpBasic().authenticationEntryPoint(new DistributeAuthEntryPoint("/login/form"))
+		.and()
 	.formLogin()  // #8
 		.loginPage("/login/form") // #9
 		.loginProcessingUrl("/login/form")

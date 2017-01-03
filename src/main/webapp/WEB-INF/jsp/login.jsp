@@ -50,11 +50,11 @@
 		      <input type="submit" class="btn btn-primary" value="Login">
 		    </div>
 		  </div>
-		  
 		</form:form>
 	</div>
 </div>
 
-	
+	<script>
+	</script>
 </body>
 </html>
