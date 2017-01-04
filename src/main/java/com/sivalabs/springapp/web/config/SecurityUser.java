@@ -31,6 +31,7 @@ public class SecurityUser extends User implements UserDetails
 			this.setPassword(user.getPassword());
 			this.setDob(user.getDob());
 			this.setRoles(user.getRoles());
+			this.setSexual(user.getSexual());
 		}		
 	}
 	

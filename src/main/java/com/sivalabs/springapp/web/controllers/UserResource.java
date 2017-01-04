@@ -3,6 +3,7 @@
  */
 package com.sivalabs.springapp.web.controllers;
 
+import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +40,17 @@ public class UserResource {
 	
 	@RequestMapping(value="", method=RequestMethod.GET, produces=MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<User> findAll()
+	public List<User> findAll(HttpServletRequest request)
 	{
+//		Enumeration<String> es = request.getSession().getAttributeNames();
+//		while (es.hasMoreElements()){
+//			String key = es.nextElement();
+//			System.out.println(key+" ingg :"+request.getSession().getAttribute(key)+",,,,,,,");
+//		}
+		//得到当前登录用户信息
+		User userDetails = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.out.println(userDetails.getSexual());
+		System.out.println(userDetails.getRoles());
 		return userService.findAll();
 	}
 	

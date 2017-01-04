@@ -15,9 +15,6 @@ import java.io.IOException;
  */
 public class DistributeAuthEntryPoint extends LoginUrlAuthenticationEntryPoint {
 
-    public DistributeAuthEntryPoint() {
-    }
-
     public DistributeAuthEntryPoint(String loginFormUrl) {
         super(loginFormUrl);
     }

@@ -45,7 +45,7 @@ public class UserServiceTest
 	
 	@Test
 	public void createUser() {
-		User user = new User(0, "Siva", "siva@gmail.com", "siva", null);
+		User user = new User(0, "Siva", "siva@gmail.com", "siva", null,null);
 		User savedUser = userService.create(user);
 		User newUser = userService.findUserById(savedUser.getId());
 		assertEquals("Siva", newUser.getName());

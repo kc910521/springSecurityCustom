@@ -28,11 +28,15 @@ public class User
 {
 	@Id @GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
+
 	private String name;
 	@Column(nullable=false, unique=true)
 	private String email;
 	@Column(nullable=false)
 	private String password;
+	@Column(nullable=true)
+	private Integer sexual;
+
 	private Date dob;
 	
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
@@ -42,18 +46,27 @@ public class User
 	public User() {
 	}
 
-	public User(int id, String name, String email, String password, Date dob) {
-		this.id = id;
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.dob = dob;
+	public User(int id, String name, String email, String password, Date dob,Integer sexual) {
+	this.id = id;
+	this.name = name;
+	this.email = email;
+	this.password = password;
+	this.dob = dob;
+	this.sexual = sexual;
+}
+
+	public Integer getSexual() {
+		return sexual;
+	}
+
+	public void setSexual(Integer sexual) {
+		this.sexual = sexual;
 	}
 
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", email=" + email
-				+ ", dob=" + dob + "]";
+				+ ", dob=" + dob + ", sexual=" + sexual + "]";
 	}
 
 	public int getId() {

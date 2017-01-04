@@ -15,7 +15,7 @@ import com.sivalabs.springapp.web.config.SecurityUser;
 
 /**
  * @author Siva
- *
+ *	实现自定义user对象 @SecurityUser
  */
 @Component
 public class CustomUserDetailsService implements UserDetailsService{
